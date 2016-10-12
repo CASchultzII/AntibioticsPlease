@@ -1,5 +1,7 @@
-﻿
+﻿using System;
+
 public static class Constants {
+
     
     //// Patient Constants
     // Chance that patient has a bacterial infection
@@ -34,5 +36,15 @@ public static class Constants {
     }
     public static string PREFS_ANTIBIOTIC_C {
         get { return "ANTIBIOTIC C"; }
+    }
+
+    private static string[] firstName = {"Mike", "John", "Michael", "Jane" };
+    private static string[] lastName = {"Green", "Jackson" };
+
+    
+    public static string getName()
+    {
+        Random rand = new Random();
+        return firstName[rand.Next(firstName.Length)] + " " + firstName[rand.Next(lastName.Length)];
     }
 }
