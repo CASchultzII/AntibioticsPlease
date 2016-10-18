@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Constants.cs" />
     <Compile Include="Assets\Scripts\Game Scripts\Chart.cs" />
+    <Compile Include="Assets\Scripts\Game Scripts\ChartOffscreenSMB.cs" />
     <Compile Include="Assets\Scripts\Game Scripts\Game.cs" />
     <Compile Include="Assets\Scripts\Patient\Health.cs" />
     <Compile Include="Assets\Scripts\Patient\Patient.cs" />
