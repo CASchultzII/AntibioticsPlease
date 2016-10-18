@@ -22,6 +22,10 @@ public class Game : MonoBehaviour {
         render(underChart);
         reset(overChart);
         render(overChart);
+
+        PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A, 0F);
+        PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B, 0F);
+        PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C, 0F);
     }
 
     public void confirm() {
@@ -36,6 +40,7 @@ public class Game : MonoBehaviour {
             if (currentPatient.dosesRemaining > 0 || !currentPatient.bacterialInfection) {
                 // adjust player health
                 currentPatient.apparentHealth = Health.nextState(currentPatient.apparentHealth);
+                currentPatient.incrementDoses();
 
                 // adjust superbug stats
                 float adjustVal = Constants.BASE_INCREASE * Constants.COMPLIANCE_MULTIPLIER;
@@ -67,7 +72,45 @@ public class Game : MonoBehaviour {
     }
 
     public void treat(string antibiotic) {
+        float resistance = PlayerPrefs.GetFloat(antibiotic, 0F) + Constants.BASE_INCREASE;
+        PlayerPrefs.SetFloat(antibiotic, resistance);
 
+        if (!currentPatient.bacterialInfection) {
+            currentPatient.apparentHealth = Health.nextState(currentPatient.apparentHealth);
+        } else {
+            bool resistant = false;
+            if (antibiotic == Constants.PREFS_ANTIBIOTIC_A) {
+                resistant = currentPatient.resistantToA;
+                currentPatient.treatedWithA = true;
+            } else if (antibiotic == Constants.PREFS_ANTIBIOTIC_B) {
+                resistant = currentPatient.resistantToB;
+                currentPatient.treatedWithB = true;
+            } else {
+                resistant = currentPatient.resistantToC;
+                currentPatient.treatedWithC = true;
+            }
+
+            if (!resistant) {
+                currentPatient.apparentHealth = Health.prevState(currentPatient.apparentHealth);
+                currentPatient.decrementDoses();
+            } else {
+                currentPatient.apparentHealth = Health.nextState(currentPatient.apparentHealth);
+                currentPatient.incrementDoses();
+
+                if (antibiotic != Constants.PREFS_ANTIBIOTIC_A && currentPatient.treatedWithA) {
+                    float val = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A, 0F) + Constants.BASE_INCREASE * Constants.COMPLIANCE_MULTIPLIER;
+                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A, val);
+                }
+                if (antibiotic != Constants.PREFS_ANTIBIOTIC_B && currentPatient.treatedWithB) {
+                    float val = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B, 0F) + Constants.BASE_INCREASE * Constants.COMPLIANCE_MULTIPLIER;
+                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B, val);
+                }
+                if (antibiotic != Constants.PREFS_ANTIBIOTIC_C && currentPatient.treatedWithC) {
+                    float val = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C, 0F) + Constants.BASE_INCREASE * Constants.COMPLIANCE_MULTIPLIER;
+                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C, val);
+                }
+            }
+        }
     }
 
     public void reset(Chart chart) {
