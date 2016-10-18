@@ -189,7 +189,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1000010398856824, guid: 727b7a4ebfac25043b6c2c36b1b2048a, type: 2}
       propertyPath: m_Name
-      value: CheckBox (1)
+      value: BBox
       objectReference: {fileID: 0}
     - target: {fileID: 114000013719325836, guid: 727b7a4ebfac25043b6c2c36b1b2048a,
         type: 2}
@@ -433,7 +433,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &364598126
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1081,7 +1081,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1000010398856824, guid: 727b7a4ebfac25043b6c2c36b1b2048a, type: 2}
       propertyPath: m_Name
-      value: CheckBox (2)
+      value: CBox
       objectReference: {fileID: 0}
     - target: {fileID: 114000013719325836, guid: 727b7a4ebfac25043b6c2c36b1b2048a,
         type: 2}
@@ -1249,7 +1249,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &954293062
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1839,6 +1839,10 @@ Prefab:
         type: 2}
       propertyPath: m_Text
       value: Antibiotic A
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000010398856824, guid: 727b7a4ebfac25043b6c2c36b1b2048a, type: 2}
+      propertyPath: m_Name
+      value: ABox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 727b7a4ebfac25043b6c2c36b1b2048a, type: 2}

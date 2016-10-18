@@ -20,14 +20,14 @@ public class ActivateSignature : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Signature.activeInHierarchy == true)
-        {
-            AnimatorStateInfo stateInfo = signatureAnimator.GetCurrentAnimatorStateInfo(0);
-            if (stateInfo.fullPathHash == onNoAnimation)
-            {
-                padAnimator.SetTrigger("Hide");
-            }
-        }
+        //if (Signature.activeInHierarchy == true)
+        //{
+        //    AnimatorStateInfo stateInfo = signatureAnimator.GetCurrentAnimatorStateInfo(0);
+        //    if (stateInfo.fullPathHash == onNoAnimation)
+        //    {
+        //        padAnimator.SetTrigger("Hide");
+        //    }
+        //}
 	}
 
     public void OnClick()
