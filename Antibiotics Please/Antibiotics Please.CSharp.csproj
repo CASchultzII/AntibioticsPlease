@@ -68,6 +68,10 @@
     <Compile Include="Assets\Scripts\Game Scripts\Game.cs" />
     <Compile Include="Assets\Scripts\Patient\Health.cs" />
     <Compile Include="Assets\Scripts\Patient\Patient.cs" />
+    <Compile Include="Assets\Scripts\Prescription\ActivateSignature.cs" />
+    <Compile Include="Assets\Scripts\Prescription\HidePrescription.cs" />
+    <Compile Include="Assets\Scripts\Prescription\PrescriptionControl.cs" />
+    <Compile Include="Assets\Scripts\Prescription\ResetPrescription.cs" />
     <Compile Include="Assets\Scripts\UI\Tooltip.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
   </ItemGroup>
