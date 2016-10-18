@@ -5,6 +5,7 @@ public class Game : MonoBehaviour {
 
     public Chart underChart, overChart;
     public Animator overChartAnimator;
+    public Animator clipBoardAnimator;
     public Sprite[] portraits;
 
     private Patient currentPatient;
@@ -23,6 +24,43 @@ public class Game : MonoBehaviour {
     }
 
     public void confirm() {
+        // Decide on what action to do
+        if (overChart.treatToggle.isOn) {
+            // launch prescription pad and setup hooks
+
+        } else if (overChart.waitToggle.isOn) {
+            // perform wait calculations
+            if (currentPatient.dosesRemaining > 0 || !currentPatient.bacterialInfection) {
+                // adjust player health
+                currentPatient.apparentHealth = Health.prevState(currentPatient.apparentHealth);
+
+                // adjust superbug stats
+                float adjustVal = Constants.BASE_INCREASE * Constants.COMPLIANCE_MULTIPLIER;
+                if (currentPatient.treatedWithA) {
+                    float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A, 0F) + adjustVal;
+                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A, adjusted);
+                }
+                if (currentPatient.treatedWithB) {
+                    float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B, 0F) + adjustVal;
+                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B, adjusted);
+                }
+                if (currentPatient.treatedWithC) {
+                    float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C, 0F) + adjustVal;
+                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C, adjusted);
+                }
+            } else {
+                // Nothing happens
+            }
+        } else if (overChart.referToggle.isOn) {
+            // dismiss patient and summarize (virus only)
+
+        } else if (overChart.dismissToggle.isOn) {
+            // dismiss patient and summarize
+
+        }
+    }
+
+    public void treat(string antibiotic) {
 
     }
 

@@ -21,6 +21,7 @@ public class Patient {
 
     private bool bacterial;
     private bool[] resistance = new bool[3];
+    private bool[] treated = new bool[] { false, false, false };
     private Health.state state;
     private int doses;
     private Sprite sprite;
@@ -37,6 +38,19 @@ public class Patient {
     }
     public bool resistantToC {
         get { return resistance[2]; }
+    }
+
+    public bool treatedWithA {
+        get { return treated[0]; }
+        set { treated[0] = value; }
+    }
+    public bool treatedWithB {
+        get { return treated[1]; }
+        set { treated[1] = value; }
+    }
+    public bool treatedWithC {
+        get { return treated[2]; }
+        set { treated[2] = value; }
     }
 
     public Health.state apparentHealth {

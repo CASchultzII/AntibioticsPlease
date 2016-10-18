@@ -19,12 +19,12 @@ public static class Constants {
 
     //// Global Resistance
     // Base increase for using an AB
-    public static double BASE_INCREASE {
-        get { return .02; }
+    public static float BASE_INCREASE {
+        get { return .02F; }
     }
     // Increase Multiplier for failure to continue medication
-    public static double COMPLIANCE_MULTIPLIER {
-        get { return 3; }
+    public static float COMPLIANCE_MULTIPLIER {
+        get { return 3F; }
     }
 
     //// PlayerPrefs Constant Names
