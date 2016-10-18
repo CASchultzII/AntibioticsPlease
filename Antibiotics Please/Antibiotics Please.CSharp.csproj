@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\Prescription\HidePrescription.cs" />
     <Compile Include="Assets\Scripts\Prescription\PrescriptionControl.cs" />
     <Compile Include="Assets\Scripts\Prescription\ResetPrescription.cs" />
+    <Compile Include="Assets\Scripts\Prescription\ToggleValue.cs" />
     <Compile Include="Assets\Scripts\UI\Tooltip.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
   </ItemGroup>

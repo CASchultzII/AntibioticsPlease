@@ -30,10 +30,10 @@ public class PrescriptionControl : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if(stateInfo.fullPathHash == onScreenHash && SignatureButton.activeInHierarchy == false)
-        {
-            SignatureButton.SetActive(true);
-        }
+        //AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        //if(stateInfo.fullPathHash == onScreenHash && SignatureButton.activeInHierarchy == false)
+        //{
+        //    SignatureButton.SetActive(true);
+        //}
 	}
 }

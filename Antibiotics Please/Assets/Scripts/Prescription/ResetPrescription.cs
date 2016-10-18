@@ -54,7 +54,7 @@ public class ResetPrescription : StateMachineBehaviour {
         antibioticB.isOn = false;
         antibioticC.isOn = false;
 
-        signatureAnimator.SetTrigger("Reset");
+        signatureAnimator.SetTrigger("Reset");    
         signature.SetActive(false);
         signatureButton.SetActive(false);
 
