@@ -13,12 +13,12 @@ public class PrescriptionControl : MonoBehaviour {
     // Use this for initialization
     void Start () {
         animator = this.GetComponent<Animator>();
-        animator.SetTrigger("Show");
-
     }
 
     public void Show()
     {
+
+        animator.SetTrigger("Show");
 
     }
 

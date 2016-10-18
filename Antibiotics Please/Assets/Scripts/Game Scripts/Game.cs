@@ -6,6 +6,7 @@ public class Game : MonoBehaviour {
     public Chart underChart, overChart;
     public Animator overChartAnimator;
     public Animator clipBoardAnimator;
+    public PrescriptionControl ppControl; // I AM OPPOSED TO THIS
     public Sprite[] portraits;
 
     private Patient currentPatient;
@@ -24,15 +25,17 @@ public class Game : MonoBehaviour {
     }
 
     public void confirm() {
+        date = date.AddDays(1);
+
         // Decide on what action to do
         if (overChart.treatToggle.isOn) {
             // launch prescription pad and setup hooks
-
+            ppControl.Show();
         } else if (overChart.waitToggle.isOn) {
             // perform wait calculations
             if (currentPatient.dosesRemaining > 0 || !currentPatient.bacterialInfection) {
                 // adjust player health
-                currentPatient.apparentHealth = Health.prevState(currentPatient.apparentHealth);
+                currentPatient.apparentHealth = Health.nextState(currentPatient.apparentHealth);
 
                 // adjust superbug stats
                 float adjustVal = Constants.BASE_INCREASE * Constants.COMPLIANCE_MULTIPLIER;
@@ -51,6 +54,9 @@ public class Game : MonoBehaviour {
             } else {
                 // Nothing happens
             }
+
+            render(underChart);
+            overChartAnimator.SetTrigger("SlideOff");
         } else if (overChart.referToggle.isOn) {
             // dismiss patient and summarize (virus only)
 
@@ -64,14 +70,14 @@ public class Game : MonoBehaviour {
 
     }
 
-    private void reset(Chart chart) {
+    public void reset(Chart chart) {
         chart.treatToggle.isOn = false;
         chart.waitToggle.isOn = false;
         chart.referToggle.isOn = false;
         chart.dismissToggle.isOn = false;
     }
 
-    private void render(Chart chart) {
+    public void render(Chart chart) {
         // Render patient health
         chart.patientHealthBar.color = Color.Lerp(Color.red, Color.green, currentPatient.healthDouble);
         chart.patientHealthBar.transform.localScale = new Vector3(currentPatient.healthDouble, 1.0F, 1.0F);
