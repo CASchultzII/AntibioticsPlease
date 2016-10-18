@@ -1982,6 +1982,11 @@ Prefab:
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114000013719325836, guid: 727b7a4ebfac25043b6c2c36b1b2048a,
+        type: 2}
+      propertyPath: m_Transition
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 727b7a4ebfac25043b6c2c36b1b2048a, type: 2}
   m_IsPrefabParent: 0
@@ -2382,6 +2387,23 @@ GameObject:
   m_PrefabParentObject: {fileID: 1000010398856824, guid: 727b7a4ebfac25043b6c2c36b1b2048a,
     type: 2}
   m_PrefabInternal: {fileID: 1393470813}
+--- !u!95 &2068897766
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2068897765}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4446cdeef7d8e794b8bacbbad1b835d3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &2068897767
 MonoBehaviour:
   m_ObjectHideFlags: 0
