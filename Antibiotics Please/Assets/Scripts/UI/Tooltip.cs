@@ -9,8 +9,12 @@ public class Tooltip : MonoBehaviour {
     public Text text;
     public bool state = false;
 
+    void Start()
+    {
+        //controller = this.GetComponent<Animator>();
+    } 
 
-    public void ShowMessage()
+    public void OnClick()
     {
         if (!state)
         {
@@ -26,7 +30,4 @@ public class Tooltip : MonoBehaviour {
             state = false;
         }
     }
-
-
-
 }
