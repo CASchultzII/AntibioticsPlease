@@ -6,6 +6,7 @@ public class Game : MonoBehaviour {
     public Chart underChart, overChart;
     public Animator overChartAnimator;
     public Animator clipBoardAnimator;
+    public Animator folderAnimator;
     public PrescriptionControl ppControl; // I AM OPPOSED TO THIS
     public Sprite[] portraits;
 
@@ -17,15 +18,19 @@ public class Game : MonoBehaviour {
         // Make a new patient so we can do things
         currentPatient = new Patient(portraits);
 
+        // reset data
+        PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A_OLD, 0F);
+        PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B_OLD, 0F);
+        PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C_OLD, 0F);
+        PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A, 0F);
+        PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B, 0F);
+        PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C, 0F);
+
         // Render our data to the UI
         reset(underChart);
         render(underChart);
         reset(overChart);
         render(overChart);
-
-        PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A, 0F);
-        PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B, 0F);
-        PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C, 0F);
     }
 
     public void confirm() {
@@ -46,15 +51,15 @@ public class Game : MonoBehaviour {
                 float adjustVal = Constants.BASE_INCREASE * Constants.COMPLIANCE_MULTIPLIER;
                 if (currentPatient.treatedWithA) {
                     float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A, 0F) + adjustVal;
-                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A, adjusted);
+                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A, Math.Min(adjusted, 1F));
                 }
                 if (currentPatient.treatedWithB) {
                     float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B, 0F) + adjustVal;
-                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B, adjusted);
+                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B, Math.Min(adjusted, 1F));
                 }
                 if (currentPatient.treatedWithC) {
                     float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C, 0F) + adjustVal;
-                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C, adjusted);
+                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C, Math.Min(adjusted, 1F));
                 }
             } else {
                 // Nothing happens
@@ -65,9 +70,87 @@ public class Game : MonoBehaviour {
         } else if (overChart.referToggle.isOn) {
             // dismiss patient and summarize (virus only)
 
+            if (!currentPatient.bacterialInfection) {
+                PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "Good job!  You recognized that the patient did not have a bacterial infection and referred them to the proper doctor.");
+            } else {
+                if (currentPatient.dosesRemaining > 0) {
+                    if (currentPatient.treatedWithA || currentPatient.treatedWithB || currentPatient.treatedWithC) {
+
+                        // adjust superbug stats
+                        float adjustVal = Constants.BASE_INCREASE * Constants.COMPLIANCE_MULTIPLIER * 2;
+                        if (currentPatient.treatedWithA) {
+                            float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A, 0F) + adjustVal;
+                            PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A, Math.Min(adjusted, 1F));
+                        }
+                        if (currentPatient.treatedWithB) {
+                            float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B, 0F) + adjustVal;
+                            PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B, Math.Min(adjusted, 1F));
+                        }
+                        if (currentPatient.treatedWithC) {
+                            float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C, 0F) + adjustVal;
+                            PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C, Math.Min(adjusted, 1F));
+                        }
+
+                        PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "You referred a patient that you could have treated further.");
+                    } else
+                        PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "You referred a patient that you could have treated.  You could have cured them but you did not.  As a result, the patient died.");
+                } else {
+                    PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "THe person you referred was already healthy, but because you referred them another docotor took credit for your work.");
+                }
+            }
+
+            clipBoardAnimator.SetTrigger("SlideOFf");
+            folderAnimator.SetTrigger("SlideOn");
         } else if (overChart.dismissToggle.isOn) {
             // dismiss patient and summarize
 
+            if (!currentPatient.bacterialInfection) {
+
+                // adjust superbug stats
+                float adjustVal = Constants.BASE_INCREASE * Constants.COMPLIANCE_MULTIPLIER * 2;
+                if (currentPatient.treatedWithA) {
+                    float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A, 0F) + adjustVal;
+                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A, Math.Min(adjusted, 1F));
+                }
+                if (currentPatient.treatedWithB) {
+                    float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B, 0F) + adjustVal;
+                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B, Math.Min(adjusted, 1F));
+                }
+                if (currentPatient.treatedWithC) {
+                    float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C, 0F) + adjustVal;
+                    PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C, Math.Min(adjusted, 1F));
+                }
+
+                PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "You failed to refer you patient.  As a result, they did not receive the appropriate treatment for their illness and died.");
+            } else {
+                if (currentPatient.dosesRemaining > 0) {
+                    if (currentPatient.treatedWithA || currentPatient.treatedWithB || currentPatient.treatedWithC) {
+
+                        // adjust superbug stats
+                        float adjustVal = Constants.BASE_INCREASE * Constants.COMPLIANCE_MULTIPLIER * 2;
+                        if (currentPatient.treatedWithA) {
+                            float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A, 0F) + adjustVal;
+                            PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A, Math.Min(adjusted, 1F));
+                        }
+                        if (currentPatient.treatedWithB) {
+                            float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B, 0F) + adjustVal;
+                            PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B, Math.Min(adjusted, 1F));
+                        }
+                        if (currentPatient.treatedWithC) {
+                            float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C, 0F) + adjustVal;
+                            PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C, Math.Min(adjusted, 1F));
+                        }
+
+                        PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "You dismissed your patient prematurely.  You could have treated them further but you did not.");
+                    } else
+                        PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "You dismissed your patient prematurely.  You could have cured them but you did not.  As a result, the patient died.");
+                } else {
+                    PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "Good job!  You successfully treated your patient.");
+                }
+            }
+
+            clipBoardAnimator.SetTrigger("SlideOFf");
+            folderAnimator.SetTrigger("SlideOn");
         }
     }
 

@@ -37,6 +37,19 @@ public static class Constants {
     public static string PREFS_ANTIBIOTIC_C {
         get { return "ANTIBIOTIC C"; }
     }
+    public static string PREFS_ANTIBIOTIC_A_OLD {
+        get { return "ANTIBIOTIC A OLD"; }
+    }
+    public static string PREFS_ANTIBIOTIC_B_OLD {
+        get { return "ANTIBIOTIC B OLD"; }
+    }
+    public static string PREFS_ANTIBIOTIC_C_OLD {
+        get { return "ANTIBIOTIC C OLD"; }
+    }
+
+    public static string PREFS_SUMMARY_MESSAGE {
+        get { return "SUMMARY MESSAGE"; }
+    }
 
     private static string[] firstName = {"Mike", "John", "Michael", "Jane" };
     private static string[] lastName = {"Green", "Jackson" };
