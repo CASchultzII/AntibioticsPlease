@@ -63,16 +63,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Animator\assignResult.cs" />
+    <Compile Include="Assets\Scripts\Animator\playPaperSound.cs" />
+    <Compile Include="Assets\Scripts\CheckMark\playChartCheck.cs" />
+    <Compile Include="Assets\Scripts\CheckMark\playPrescriptionCheck.cs" />
     <Compile Include="Assets\Scripts\Constants.cs" />
     <Compile Include="Assets\Scripts\Feedback\CloseFeedback.cs" />
     <Compile Include="Assets\Scripts\Feedback\NextPatient.cs" />
     <Compile Include="Assets\Scripts\Game Scripts\Chart.cs" />
     <Compile Include="Assets\Scripts\Game Scripts\ChartOffscreenSMB.cs" />
     <Compile Include="Assets\Scripts\Game Scripts\Game.cs" />
+    <Compile Include="Assets\Scripts\Game Scripts\RestartGame.cs" />
     <Compile Include="Assets\Scripts\Patient\Health.cs" />
     <Compile Include="Assets\Scripts\Patient\Patient.cs" />
     <Compile Include="Assets\Scripts\Prescription\ActivateSignature.cs" />
     <Compile Include="Assets\Scripts\Prescription\HidePrescription.cs" />
+    <Compile Include="Assets\Scripts\Prescription\PlaySignatureSound.cs" />
     <Compile Include="Assets\Scripts\Prescription\PrescriptionControl.cs" />
     <Compile Include="Assets\Scripts\Prescription\ResetPrescription.cs" />
     <Compile Include="Assets\Scripts\Prescription\ToggleValue.cs" />

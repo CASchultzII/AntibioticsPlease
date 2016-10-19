@@ -8,23 +8,27 @@ public class Game : MonoBehaviour {
     public Animator overChartAnimator;
     public Animator clipBoardAnimator;
     public Animator feedbackAnimator;
+    public Animator resultAnimator;
     public PrescriptionControl ppControl; // I AM OPPOSED TO THIS
     public Sprite[] portraits;
+
+    public Text deathCountText, successCountText;
+
+    [HideInInspector]
+    public int deathCount, successCount;
+
+    bool death, success;
+    bool gameOver;
 
     private Patient currentPatient;
     private DateTime date = DateTime.Today;
 
     public Text TotalMessage, AMessage, BMessage, CMessage;
 
+    public AudioSource buttonClickSound, checkMarkSound, paperSound, signatureSound, patientDeathSound, patientSuccessSound;
+
     // Use this for initialization
     void Start() {
-        generatePatient();
-    }
-
-    public void generatePatient()
-    {
-        // Make a new patient so we can do things
-        currentPatient = new Patient(portraits);
 
         // reset data
         PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A_OLD, 0F);
@@ -34,11 +38,30 @@ public class Game : MonoBehaviour {
         PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B, 0F);
         PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C, 0F);
 
+        generatePatient();
+
+        deathCount = 0;
+        successCount = 0;
+
+        UpdateDeathCount();
+        UpdateSuccessCount();
+
+        gameOver = false;
+    }
+
+    public void generatePatient()
+    {
+        // Make a new patient so we can do things
+        currentPatient = new Patient(portraits);
+
         // Render our data to the UI
         reset(underChart);
         render(underChart);
         reset(overChart);
         render(overChart);
+
+        death = false;
+        success = false;
     }
 
     public void confirm() {
@@ -79,31 +102,42 @@ public class Game : MonoBehaviour {
             // dismiss patient and summarize (virus only)
 
             if (!currentPatient.bacterialInfection) {
+                success = true;
+                successCount++;
                 PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "Good job!  You recognized that the patient did not have a bacterial infection and referred them to the proper doctor.");
             } else {
                 if (currentPatient.dosesRemaining > 0) {
-                    if (currentPatient.treatedWithA || currentPatient.treatedWithB || currentPatient.treatedWithC) {
+                    if (currentPatient.treatedWithA || currentPatient.treatedWithB || currentPatient.treatedWithC)
+                    {
 
                         // adjust superbug stats
                         float adjustVal = Constants.BASE_INCREASE * Constants.COMPLIANCE_MULTIPLIER * 2;
-                        if (currentPatient.treatedWithA) {
+                        if (currentPatient.treatedWithA)
+                        {
                             float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A, 0F) + adjustVal;
                             PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A, Math.Min(adjusted, 1F));
                         }
-                        if (currentPatient.treatedWithB) {
+                        if (currentPatient.treatedWithB)
+                        {
                             float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B, 0F) + adjustVal;
                             PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B, Math.Min(adjusted, 1F));
                         }
-                        if (currentPatient.treatedWithC) {
+                        if (currentPatient.treatedWithC)
+                        {
                             float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C, 0F) + adjustVal;
                             PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C, Math.Min(adjusted, 1F));
                         }
 
                         PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "You referred a patient that you could have treated further.");
-                    } else
+                    }
+                    else
+                    {
+                        deathCount++;
+                        death = true;
                         PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "You referred a patient that you could have treated.  You could have cured them but you did not.  As a result, the patient died.");
+                    }
                 } else {
-                    PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "THe person you referred was already healthy, but because you referred them another docotor took credit for your work.");
+                    PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "The person you referred was already healthy, but because you referred them another docotor took credit for your work.");
                 }
             }
 
@@ -115,6 +149,10 @@ public class Game : MonoBehaviour {
             AMessage.color = Color.Lerp(Color.green, Color.red, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A));
             BMessage.color = Color.Lerp(Color.green, Color.red, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B));
             CMessage.color = Color.Lerp(Color.green, Color.red, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C));
+
+            PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A_OLD, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A));
+            PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B_OLD, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B));
+            PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C_OLD, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C));
 
             feedbackAnimator.SetTrigger("Show");
 
@@ -138,31 +176,43 @@ public class Game : MonoBehaviour {
                     float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C, 0F) + adjustVal;
                     PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C, Math.Min(adjusted, 1F));
                 }
-
+                death = true;
+                deathCount++;
                 PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "You failed to refer you patient.  As a result, they did not receive the appropriate treatment for their illness and died.");
             } else {
                 if (currentPatient.dosesRemaining > 0) {
-                    if (currentPatient.treatedWithA || currentPatient.treatedWithB || currentPatient.treatedWithC) {
+                    if (currentPatient.treatedWithA || currentPatient.treatedWithB || currentPatient.treatedWithC)
+                    {
 
                         // adjust superbug stats
                         float adjustVal = Constants.BASE_INCREASE * Constants.COMPLIANCE_MULTIPLIER * 2;
-                        if (currentPatient.treatedWithA) {
+                        if (currentPatient.treatedWithA)
+                        {
                             float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A, 0F) + adjustVal;
                             PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A, Math.Min(adjusted, 1F));
                         }
-                        if (currentPatient.treatedWithB) {
+                        if (currentPatient.treatedWithB)
+                        {
                             float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B, 0F) + adjustVal;
                             PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B, Math.Min(adjusted, 1F));
                         }
-                        if (currentPatient.treatedWithC) {
+                        if (currentPatient.treatedWithC)
+                        {
                             float adjusted = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C, 0F) + adjustVal;
                             PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C, Math.Min(adjusted, 1F));
                         }
 
                         PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "You dismissed your patient prematurely.  You could have treated them further but you did not.");
-                    } else
+                    }
+                    else
+                    {
+                        death = true;
+                        deathCount++;
                         PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "You dismissed your patient prematurely.  You could have cured them but you did not.  As a result, the patient died.");
+                    }
                 } else {
+                    success = true;
+                    successCount++;
                     PlayerPrefs.SetString(Constants.PREFS_SUMMARY_MESSAGE, "Good job!  You successfully treated your patient.");
                 }
             }
@@ -175,6 +225,10 @@ public class Game : MonoBehaviour {
             AMessage.color = Color.Lerp(Color.green, Color.red, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A));
             BMessage.color = Color.Lerp(Color.green, Color.red, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B));
             CMessage.color = Color.Lerp(Color.green, Color.red, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C));
+
+            PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_A_OLD, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A));
+            PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_B_OLD, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B));
+            PlayerPrefs.SetFloat(Constants.PREFS_ANTIBIOTIC_C_OLD, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C));
 
             feedbackAnimator.SetTrigger("Show");
         }
@@ -245,5 +299,49 @@ public class Game : MonoBehaviour {
         // Set Portrait and Date
         chart.patientPortrait.sprite = currentPatient.portrait;
         chart.dateText.text = date.ToString("MMMM dd, yyyy");
+    }
+
+    public void UpdateDeathCount()
+    {
+        deathCountText.text = "Deaths: " + deathCount;
+    }
+
+    public void UpdateSuccessCount()
+    {
+        successCountText.text = "Saves: " + successCount;
+    }
+
+    public void GameOver()
+    {
+        gameOver = true;
+        resultAnimator.SetTrigger("Show");
+    }
+
+    public void playButtonClickSound()
+    {
+        buttonClickSound.Play();
+    }
+
+    public void playCheckMarkSound()
+    {
+        checkMarkSound.Play();
+    }
+
+    public void playPaperSound()
+    {
+        paperSound.Play();
+    }
+
+    public void playSignatureSound()
+    {
+        signatureSound.Play();
+    }
+
+    public void playResultSound()
+    {
+        if(death)
+            patientDeathSound.Play();
+        if (success)
+            patientSuccessSound.Play();
     }
 }

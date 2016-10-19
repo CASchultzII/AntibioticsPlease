@@ -4,8 +4,8 @@ public class ChartOffscreenSMB : StateMachineBehaviour {
 
     private Game game;
 
-    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        base.OnStateEnter(animator, stateInfo, layerIndex);
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
         if (game == null)
             game = GameObject.Find("Canvas").GetComponents<MonoBehaviour>()[2] as Game;
 

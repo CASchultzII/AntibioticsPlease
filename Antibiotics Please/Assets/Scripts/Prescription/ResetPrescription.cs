@@ -40,44 +40,47 @@ public class ResetPrescription : StateMachineBehaviour {
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (!start) {
-            string selected;
+        string selected;
 
-            // Reset Pad
-            if (antibioticA == null)
-                antibioticA = GameObject.Find("ABox").GetComponent<Toggle>();
-            if (antibioticB == null)
-                antibioticB = GameObject.Find("BBox").GetComponent<Toggle>();
-            if (antibioticC == null)
-                antibioticC = GameObject.Find("CBox").GetComponent<Toggle>();
-            if (signature == null)
-                signature = GameObject.Find("Signature");
-            if (signatureButton == null)
-                signatureButton = GameObject.Find("SignatureButton");
+        // Reset Pad
+        if (antibioticA == null)
+            antibioticA = GameObject.Find("ABox").GetComponent<Toggle>();
+        if (antibioticB == null)
+            antibioticB = GameObject.Find("BBox").GetComponent<Toggle>();
+        if (antibioticC == null)
+            antibioticC = GameObject.Find("CBox").GetComponent<Toggle>();
+        if (signature == null)
+            signature = GameObject.Find("Signature");
+        if (signatureButton == null)
+            signatureButton = GameObject.Find("SignatureButton");
 
-            signatureAnimator = signature.GetComponent<Animator>();
+        if (game == null)
+            game = GameObject.Find("Canvas").GetComponents<MonoBehaviour>()[2] as Game;
 
+        signatureAnimator = signature.GetComponent<Animator>();
+
+        signatureAnimator.SetTrigger("Reset");
+        signature.SetActive(false);
+        signatureButton.SetActive(false);
+
+        if (!start)
+        {
+            // Game Logic
             if (antibioticA.isOn) selected = Constants.PREFS_ANTIBIOTIC_A;
             else if (antibioticB.isOn) selected = Constants.PREFS_ANTIBIOTIC_B;
             else selected = Constants.PREFS_ANTIBIOTIC_C;
-            
-            antibioticA.isOn = false;
-            antibioticB.isOn = false;
-            antibioticC.isOn = false;
-
-            signatureAnimator.SetTrigger("Reset");
-            signature.SetActive(false);
-            signatureButton.SetActive(false);
-
-            // Game Logic
-            if (game == null)
-                game = GameObject.Find("Canvas").GetComponents<MonoBehaviour>()[2] as Game;
 
             game.treat(selected);
             game.render(game.underChart);
             game.overChartAnimator.SetTrigger("SlideOff");
-        } else {
+        }
+        else
+        {
             start = false;
         }
+
+        antibioticA.isOn = false;
+        antibioticB.isOn = false;
+        antibioticC.isOn = false;
     }
 }
