@@ -16,8 +16,8 @@ public class assignResult : StateMachineBehaviour {
         if (deathText == null)
             deathText = GameObject.Find("ResultTable").transform.GetChild(2).gameObject;
 
-        successText.GetComponent<Text>().text = game.successCount + " people got saved.";
-        deathText.GetComponent<Text>().text = game.deathCount + " people death.";
+        successText.GetComponent<Text>().text = "Patients cured: " + game.successCount;
+        deathText.GetComponent<Text>().text = "Patient deaths: " + game.deathCount;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

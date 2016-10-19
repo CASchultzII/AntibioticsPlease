@@ -20,7 +20,7 @@ public static class Constants {
     //// Global Resistance
     // Base increase for using an AB
     public static float BASE_INCREASE {
-        get { return .02F; }
+        get { return .03F; }
     }
     // Increase Multiplier for failure to continue medication
     public static float COMPLIANCE_MULTIPLIER {
