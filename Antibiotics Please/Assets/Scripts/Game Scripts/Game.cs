@@ -1,20 +1,28 @@
 ﻿using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour {
 
     public Chart underChart, overChart;
     public Animator overChartAnimator;
     public Animator clipBoardAnimator;
-    public Animator folderAnimator;
+    public Animator feedbackAnimator;
     public PrescriptionControl ppControl; // I AM OPPOSED TO THIS
     public Sprite[] portraits;
 
     private Patient currentPatient;
     private DateTime date = DateTime.Today;
 
+    public Text TotalMessage, AMessage, BMessage, CMessage;
+
     // Use this for initialization
     void Start() {
+        generatePatient();
+    }
+
+    public void generatePatient()
+    {
         // Make a new patient so we can do things
         currentPatient = new Patient(portraits);
 
@@ -99,8 +107,18 @@ public class Game : MonoBehaviour {
                 }
             }
 
-            clipBoardAnimator.SetTrigger("SlideOFf");
-            folderAnimator.SetTrigger("SlideOn");
+            TotalMessage.text = PlayerPrefs.GetString(Constants.PREFS_SUMMARY_MESSAGE);
+            AMessage.text = "Resist to Antibiotic A: " + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A_OLD) + " -> " + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A);
+            BMessage.text = "Resist to Antibiotic B: " + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B_OLD) + " -> " + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B);
+            CMessage.text = "Resist to Antibiotic C: " + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C_OLD) + " -> " + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C);
+
+            AMessage.color = Color.Lerp(Color.green, Color.red, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A));
+            BMessage.color = Color.Lerp(Color.green, Color.red, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B));
+            CMessage.color = Color.Lerp(Color.green, Color.red, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C));
+
+            feedbackAnimator.SetTrigger("Show");
+
+            //overChartAnimator.SetTrigger("SlideOff");
         } else if (overChart.dismissToggle.isOn) {
             // dismiss patient and summarize
 
@@ -149,8 +167,16 @@ public class Game : MonoBehaviour {
                 }
             }
 
-            clipBoardAnimator.SetTrigger("SlideOFf");
-            folderAnimator.SetTrigger("SlideOn");
+            TotalMessage.text = PlayerPrefs.GetString(Constants.PREFS_SUMMARY_MESSAGE);
+            AMessage.text = "Resist to Antibiotic A: " + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A_OLD) + " -> " + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A);
+            BMessage.text = "Resist to Antibiotic B: " + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B_OLD) + " -> " + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B);
+            CMessage.text = "Resist to Antibiotic C: " + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C_OLD) + " -> " + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C);
+
+            AMessage.color = Color.Lerp(Color.green, Color.red, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A));
+            BMessage.color = Color.Lerp(Color.green, Color.red, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B));
+            CMessage.color = Color.Lerp(Color.green, Color.red, PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C));
+
+            feedbackAnimator.SetTrigger("Show");
         }
     }
 
