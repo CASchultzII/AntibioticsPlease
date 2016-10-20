@@ -41,7 +41,7 @@ public class NextPatient : StateMachineBehaviour {
         else if (stateInfo.fullPathHash == onSlideOutAnimation)
         {
 
-            if (PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A) + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B) + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C) >= 2f)
+            if (PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A) + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B) + PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C) >= 1.5f)
             {
                 game.GameOver();
             }

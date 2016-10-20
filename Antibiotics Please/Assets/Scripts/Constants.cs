@@ -24,7 +24,7 @@ public static class Constants {
     }
     // Increase Multiplier for failure to continue medication
     public static float COMPLIANCE_MULTIPLIER {
-        get { return 4F; }
+        get { return 5F; }
     }
 
     //// PlayerPrefs Constant Names

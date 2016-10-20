@@ -292,7 +292,7 @@ public class Game : MonoBehaviour {
         float scale = PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_A, 0F) +
                 PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_B, 0F) +
                 PlayerPrefs.GetFloat(Constants.PREFS_ANTIBIOTIC_C, 0F);
-        scale /= 3;
+        scale /= 1.5f;
         chart.superbugBar.color = Color.Lerp(Color.green, Color.red, scale);
         chart.superbugBar.transform.localScale = new Vector3(scale, 1.0F, 1.0F);
 
